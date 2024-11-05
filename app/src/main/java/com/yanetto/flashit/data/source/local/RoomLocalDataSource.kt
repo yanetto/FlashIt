@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RoomLocalDatasource @Inject constructor(
+class RoomLocalDataSource @Inject constructor(
     private val cardDao: CardDao,
     private val cardSetDao: CardSetDao
-) : LocalDatasource {
+) : LocalDataSource {
     //Card
     override suspend fun insertCard(card: Card) {
         cardDao.insertCard(card.toCardEntity())

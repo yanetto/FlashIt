@@ -5,7 +5,7 @@ import com.yanetto.flashit.domain.model.CardSet
 import com.yanetto.flashit.domain.model.CardSetWithCards
 import kotlinx.coroutines.flow.Flow
 
-interface LocalDatasource {
+interface LocalDataSource {
     //Card
     suspend fun insertCard(card: Card)
 
