@@ -19,4 +19,7 @@ interface CardSetDao {
 
     @Query("SELECT * FROM cardsetentity WHERE id = :id")
     fun getCardSetById(id: Int): Flow<CardSetEntity>
+
+    @Query("SELECT * FROM cardsetentity")
+    fun getAllCardSets(): Flow<List<CardSetEntity>>
 }
