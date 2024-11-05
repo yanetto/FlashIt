@@ -26,7 +26,7 @@ class LocalSourceModuleProvider {
 
     @Provides
     @Singleton
-    fun providesLocalDatabase(
+    fun provideLocalDatabase(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
@@ -44,7 +44,7 @@ abstract class LocalSourceModuleBuilder {
     ) : LocalDataSource
 
     @Binds
-    abstract fun bindDefaultJustNotesRepository(
-        defaultJustNotesRepository: LocalDataSourceRepositoryImpl
+    abstract fun bindDefaultFlashItRepository(
+        defaultFlashItRepository: LocalDataSourceRepositoryImpl
     ) : LocalDataSourceRepository
 }
