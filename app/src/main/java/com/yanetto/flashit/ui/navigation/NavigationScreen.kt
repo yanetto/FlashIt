@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yanetto.flashit.ui.screens.cardscreen.CardScreen
+import com.yanetto.flashit.ui.screens.cardsetscreen.CardSetScreen
 
 enum class AppScreen {
     Home,
@@ -28,20 +29,20 @@ fun FlashItApp(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route ?: AppScreen.Learn.name
+        backStackEntry?.destination?.route ?: AppScreen.Home.name
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Learn.name,
+            startDestination = AppScreen.Home.name,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
             composable(route = AppScreen.Home.name) {
-
+                CardSetScreen()
             }
 
             composable(route = AppScreen.Learn.name) {
