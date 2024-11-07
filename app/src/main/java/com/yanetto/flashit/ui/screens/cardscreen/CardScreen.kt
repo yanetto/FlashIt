@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.yanetto.flashit.R
 
 @Composable
@@ -133,6 +134,7 @@ fun CardScreen(
         Text(
             text = "Нажмите на карточку, чтобы перевернуть ее",
             color = Color.Black.copy(0.4f),
+            fontSize = 14.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f),
