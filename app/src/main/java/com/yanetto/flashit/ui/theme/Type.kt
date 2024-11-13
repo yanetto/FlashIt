@@ -2,33 +2,74 @@ package com.yanetto.flashit.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.yanetto.flashit.R
 
-// Set of Material typography styles to start with
+private val themeFontFamily = FontFamily(
+    Font(R.font.inter)
+)
+
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
+    displayLarge = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 96.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 88.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 80.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 72.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 64.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 56.sp
+    ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontFamily = themeFontFamily,
+        fontSize = 48.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 40.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 32.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 24.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 18.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 14.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 12.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = themeFontFamily,
+        fontSize = 10.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = themeFontFamily,
+        fontSize = 8.sp
     )
-    */
 )
