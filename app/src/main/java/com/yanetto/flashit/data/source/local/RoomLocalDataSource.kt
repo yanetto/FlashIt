@@ -36,7 +36,7 @@ class RoomLocalDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getCardSetWithCards(setId: Int): CardSetWithCards {
+    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards> {
         return cardDao.getCardSetWithCards(setId)
     }
 

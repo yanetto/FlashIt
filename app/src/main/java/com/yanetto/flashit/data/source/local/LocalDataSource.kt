@@ -15,7 +15,7 @@ interface LocalDataSource {
 
     fun getCardByIdFlow(id: Int): Flow<Card>
 
-    suspend fun getCardSetWithCards(setId: Int): CardSetWithCards
+    fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards>
 
     //CardSet
     suspend fun insertCardSet(cardSet: CardSet)

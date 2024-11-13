@@ -19,7 +19,7 @@ class LocalDataSourceRepositoryImpl @Inject constructor(
 
     override fun getCardByIdFlow(id: Int): Flow<Card> = localDatasource.getCardByIdFlow(id)
 
-    override suspend fun getCardSetWithCards(setId: Int): CardSetWithCards = localDatasource.getCardSetWithCards(setId)
+    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards> = localDatasource.getCardSetWithCards(setId)
 
     override suspend fun insertCardSet(cardSet: CardSet) = localDatasource.insertCardSet(cardSet)
 
