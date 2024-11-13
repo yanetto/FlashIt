@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yanetto.flashit.ui.screens.cardscreen.CardScreen
+import com.yanetto.flashit.ui.screens.cardsetgridscreen.CardSetGridScreen
 import com.yanetto.flashit.ui.screens.cardsetscreen.CardSetScreen
 
 enum class AppScreen {
@@ -29,7 +30,7 @@ fun FlashItApp(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route ?: AppScreen.Home.name
+        backStackEntry?.destination?.route?.substringBefore("/") ?: AppScreen.Home.name
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -42,22 +43,32 @@ fun FlashItApp(
                 .padding(innerPadding)
         ) {
             composable(route = AppScreen.Home.name) {
-                CardSetScreen()
+                CardSetScreen(
+                    onCardSetEditClick = { setId ->
+                        navController.navigate("${AppScreen.Grid.name}/$setId")
+                    },
+                    onCardSetPlayClick = { navController.navigate(AppScreen.Learn.name) }
+                )
             }
 
             composable(route = AppScreen.Learn.name) {
                 CardScreen()
             }
 
-            composable(route = AppScreen.Grid.name) {
-
+            composable(
+                route = "${AppScreen.Grid.name}/{setId}"
+            ) { backStackEntry ->
+                val setId = backStackEntry.arguments?.getString("setId")?.toIntOrNull()
+                setId?.let {
+                    CardSetGridScreen(setId = it)
+                }
             }
 
             composable(route = AppScreen.Edit.name) {
-
             }
         }
     }
 }
+
 
 

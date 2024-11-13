@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +43,8 @@ import com.yanetto.flashit.R
 @Composable
 fun CardSetScreen(
     modifier: Modifier = Modifier,
+    onCardSetEditClick: (Int) -> Unit,
+    onCardSetPlayClick: () -> Unit,
     viewModel: CardSetScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -104,7 +107,7 @@ fun CardSetScreen(
                     shape = MaterialTheme.shapes.medium,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onBackground),
+                        contentColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
                 ){
@@ -131,7 +134,7 @@ fun CardSetScreen(
                             modifier = Modifier
                                 .size(28.dp)
                                 .clip(CircleShape)
-                                .clickable { }
+                                .clickable { onCardSetPlayClick() }
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Icon(
@@ -140,7 +143,7 @@ fun CardSetScreen(
                             modifier = Modifier
                                 .size(28.dp)
                                 .clip(CircleShape)
-                                .clickable { }
+                                .clickable { onCardSetEditClick(cardSet.id) }
                         )
                     }
                 }

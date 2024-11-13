@@ -2,7 +2,6 @@ package com.yanetto.flashit.ui.screens.cardscreen
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -37,13 +38,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.flashit.R
 
 @Composable
 fun CardScreen(
     modifier: Modifier = Modifier,
-    viewModel: CardScreenViewModel = CardScreenViewModel()
+    viewModel: CardScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
     Column(
@@ -56,7 +57,7 @@ fun CardScreen(
                 .fillMaxWidth()
                 .weight(0.5f),
             text = "Подготовка к себесу",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )
@@ -68,7 +69,7 @@ fun CardScreen(
                 .fillMaxWidth()
                 .weight(0.5f),
             text = "1/10",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
 
@@ -88,7 +89,6 @@ fun CardScreen(
             Card (
                 modifier = Modifier
                     .clip(CircleShape)
-                    .border(1.dp, Color.Black, CircleShape)
                     .clickable { }
             ) {
                 Icon(
@@ -105,7 +105,6 @@ fun CardScreen(
             Card (
                 modifier = Modifier
                     .clip(CircleShape)
-                    .border(1.dp, Color.Black, CircleShape)
                     .clickable { }
             ) {
                 Icon(
@@ -124,8 +123,8 @@ fun CardScreen(
 
         Text(
             text = stringResource(R.string.tap_on_card_to_flip_it),
-            color = Color.Black.copy(0.4f),
-            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.tertiary,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f),
@@ -155,8 +154,8 @@ fun ColumnScope.RotatingCard (
     Card(
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = Color(168, 153, 255),
-            contentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = Color.Black
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -182,7 +181,7 @@ fun ColumnScope.RotatingCard (
                 Text(
                     text = uiState.value.question,
                     color = Color.Black,
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(16.dp),
                     fontWeight = FontWeight.Bold
@@ -191,8 +190,11 @@ fun ColumnScope.RotatingCard (
                 Text(
                     text = uiState.value.answer,
                     color = Color.Black,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 )
             }
         }
