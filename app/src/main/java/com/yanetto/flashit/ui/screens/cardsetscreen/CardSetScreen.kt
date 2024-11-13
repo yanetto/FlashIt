@@ -1,6 +1,7 @@
 package com.yanetto.flashit.ui.screens.cardsetscreen
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +52,15 @@ fun CardSetScreen(
 ) {
     val uiState = viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
+    var isPopupVisible by remember { mutableStateOf(false) }
+
+    EditPopup(
+        isVisible = isPopupVisible,
+        onDeleteButtonClick = { viewModel.deleteSet(uiState.value.currentSet) },
+        onEditButtonClick = { onCardSetEditClick(uiState.value.currentSet.id) },
+        onChangeColorClick = {  },
+        onDismiss = { isPopupVisible = false }
+    )
 
     if (showDialog) {
         EnterNameDialog(
@@ -102,7 +114,7 @@ fun CardSetScreen(
                 .fillMaxWidth()
                 .weight(8f)
         ) {
-            items(uiState.value.cardSet) { cardSet ->
+            items(uiState.value.cardSets) { cardSet ->
                 Card(
                     shape = MaterialTheme.shapes.medium,
                     colors = CardDefaults.cardColors(
@@ -138,12 +150,15 @@ fun CardSetScreen(
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Icon(
-                            painter = painterResource(id = R.drawable.edit),
+                            painter = painterResource(id = R.drawable.more),
                             contentDescription = "Редактировать",
                             modifier = Modifier
                                 .size(28.dp)
                                 .clip(CircleShape)
-                                .clickable { onCardSetEditClick(cardSet.id) }
+                                .clickable {
+                                    viewModel.setCurrentCardSet(cardSet)
+                                    isPopupVisible = true
+                                }
                         )
                     }
                 }
@@ -215,4 +230,114 @@ fun EnterNameDialog(
             }
         }
     )
+}
+
+@Composable
+fun SimpleTextButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    painter: Painter? = null,
+){
+    val iconColor = if (color != Color.Unspecified) color else LocalContentColor.current
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium)
+            .clickable { onClick() }
+    ){
+        Box(
+            modifier = modifier.padding(vertical = 16.dp, horizontal = 8.dp)
+        ){
+            if (painter != null) {
+                Icon(
+                    painter = painter,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+            Text(
+                text = text,
+                color = color,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+}
+
+@Composable
+fun EditPopup(
+    isVisible: Boolean,
+    onDeleteButtonClick: () -> Unit,
+    onEditButtonClick: () -> Unit,
+    onChangeColorClick: () -> Unit,
+    onDismiss: () -> Unit = {}
+){
+    val interactionSource = remember { MutableInteractionSource() }
+    if (isVisible) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = onDismiss
+                    ),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomCenter)
+                ) {
+                    Card {
+                        Column {
+                            SimpleTextButton(
+                                text = "Поменять цвет",
+                                onClick = { onChangeColorClick(); onDismiss() },
+                                painter = painterResource(id = R.drawable.choose_color),
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+
+                            SimpleTextButton(
+                                text = "Редактировать",
+                                onClick = { onEditButtonClick(); onDismiss() },
+                                painter = painterResource(id = R.drawable.edit),
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+
+                            SimpleTextButton(
+                                text = "Удалить",
+                                onClick = { onDeleteButtonClick(); onDismiss() },
+                                color = MaterialTheme.colorScheme.error,
+                                painter = painterResource(id = R.drawable.delete),
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.size(16.dp))
+
+                    Card {
+                        SimpleTextButton(
+                            text = "Закрыть",
+                            onClick = onDismiss,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                }
+            }
+
+        }
+    }
 }

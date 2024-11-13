@@ -20,17 +20,13 @@ class CardSetGridScreenViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CardSetGridScreenUiState())
     val uiState: StateFlow<CardSetGridScreenUiState> = _uiState.asStateFlow()
 
-    init {
-        updateSetId(_uiState.value.setId)
-    }
-
     fun updateSetId(setId: Int) {
         _uiState.update { currentState ->
             currentState.copy(setId = setId)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.getCardSetWithCards(_uiState.value.setId)
+            localDataSourceRepositoryImpl.getCardSetWithCards(setId)
                 .collect { cardSetWithCards ->
                     _uiState.update { currentState ->
                         currentState.copy(
@@ -38,6 +34,14 @@ class CardSetGridScreenViewModel @Inject constructor(
                         )
                     }
                 }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSourceRepositoryImpl.getCardSetByIdFlow(setId).collect { cardSet ->
+                _uiState.update { currentState ->
+                    currentState.copy(setName = cardSet.name)
+                }
+            }
         }
     }
 }

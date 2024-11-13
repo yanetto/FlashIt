@@ -30,8 +30,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun CardSetGridScreen(
-    setId: Int? = null,
     modifier: Modifier = Modifier,
+    setId: Int? = null,
     viewModel: CardSetGridScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -52,7 +52,7 @@ fun CardSetGridScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f),
-            text = "Подготовка к себесу",
+            text = uiState.value.setName,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold

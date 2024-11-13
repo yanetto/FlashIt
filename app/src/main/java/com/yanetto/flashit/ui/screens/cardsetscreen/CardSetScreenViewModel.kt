@@ -24,7 +24,7 @@ class CardSetScreenViewModel @Inject constructor(
         viewModelScope.launch {
             localDataSourceRepositoryImpl.getAllCardSetsFlow().collect { cardSets ->
                 _uiState.update { currentState ->
-                    currentState.copy(cardSet = cardSets)
+                    currentState.copy(cardSets = cardSets)
                 }
             }
         }
@@ -39,6 +39,20 @@ class CardSetScreenViewModel @Inject constructor(
     fun addSet(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             localDataSourceRepositoryImpl.insertCardSet(CardSet(name = name))
+        }
+    }
+
+    fun setCurrentCardSet(cardSet: CardSet) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentSet = cardSet
+            )
+        }
+    }
+
+    fun deleteSet(cardSet: CardSet) {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSourceRepositoryImpl.deleteCardSet(cardSet)
         }
     }
 }
