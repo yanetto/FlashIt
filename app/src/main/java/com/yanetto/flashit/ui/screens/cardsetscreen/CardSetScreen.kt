@@ -42,6 +42,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.flashit.R
+import com.yanetto.flashit.domain.model.CardSet
+
+enum class DialogType {
+    NONE,
+    CREATE,
+    EDIT
+}
 
 @Composable
 fun CardSetScreen(
@@ -51,28 +58,43 @@ fun CardSetScreen(
     viewModel: CardSetScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(DialogType.NONE) }
     var isPopupVisible by remember { mutableStateOf(false) }
 
     EditPopup(
         isVisible = isPopupVisible,
         onDeleteButtonClick = { viewModel.deleteSet(uiState.value.currentSet) },
-        onEditButtonClick = { onCardSetEditClick(uiState.value.currentSet.id) },
+        onEditButtonClick = { showDialog = DialogType.EDIT },
         onChangeColorClick = {  },
         onDismiss = { isPopupVisible = false }
     )
 
-    if (showDialog) {
+    if (showDialog != DialogType.NONE) {
         EnterNameDialog(
+            text = when (showDialog) {
+                DialogType.EDIT -> "Введите новое название"
+                DialogType.CREATE -> "Введите название набора"
+                DialogType.NONE -> ""
+            },
             viewModel = viewModel,
-            onDismiss = { showDialog = false },
+            onDismiss = { showDialog = DialogType.NONE },
             onConfirmClick = {
-                viewModel.addSet(it)
-                showDialog = false
-            }
+                if (showDialog == DialogType.CREATE) {
+                    viewModel.addSet(it)
+                } else {
+                    viewModel.updateSet(it)
+                }
+                showDialog = DialogType.NONE
+            },
+            currentName =
+            when (showDialog) {
+                DialogType.EDIT -> uiState.value.currentSet.name
+                DialogType.CREATE -> ""
+                DialogType.NONE -> ""
+            },
         )
     }
-    val mod: Modifier = if (showDialog) {
+    val mod: Modifier = if (showDialog != DialogType.NONE) {
         modifier.blur(20.dp)
     } else modifier
 
@@ -103,7 +125,7 @@ fun CardSetScreen(
                     .size(28.dp)
                     .clip(CircleShape)
                     .align(Alignment.CenterEnd)
-                    .clickable { showDialog = true }
+                    .clickable { showDialog = DialogType.CREATE }
             )
         }
 
@@ -122,6 +144,10 @@ fun CardSetScreen(
                         contentColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickable {
+                            onCardSetEditClick(cardSet.id)
+                        }
                 ){
                     Row (
                         modifier = Modifier
@@ -162,8 +188,6 @@ fun CardSetScreen(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -171,11 +195,13 @@ fun CardSetScreen(
 
 @Composable
 fun EnterNameDialog(
+    text: String,
+    currentName: String,
     viewModel: CardSetScreenViewModel,
     onDismiss: () -> Unit = {},
-    onConfirmClick: (String) -> Unit = {}
+    onConfirmClick: (CardSet) -> Unit = {}
 ) {
-    var name by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf(currentName) }
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -189,7 +215,7 @@ fun EnterNameDialog(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Введите название набора",
+                        text = text,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -204,7 +230,7 @@ fun EnterNameDialog(
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 16.dp)
                     )
                     Row (
                         verticalAlignment = Alignment.CenterVertically,
@@ -223,7 +249,7 @@ fun EnterNameDialog(
                             color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.clickable { onConfirmClick(name) }
+                            modifier = Modifier.clickable { onConfirmClick(viewModel.uiState.value.currentSet.copy(name = name)) }
                         )
                     }
                 }
@@ -310,7 +336,7 @@ fun EditPopup(
                             )
 
                             SimpleTextButton(
-                                text = "Редактировать",
+                                text = "Изменить название",
                                 onClick = { onEditButtonClick(); onDismiss() },
                                 painter = painterResource(id = R.drawable.edit),
                                 modifier = Modifier.padding(horizontal = 8.dp)

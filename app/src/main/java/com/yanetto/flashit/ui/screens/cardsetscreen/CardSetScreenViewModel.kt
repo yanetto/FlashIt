@@ -36,9 +36,15 @@ class CardSetScreenViewModel @Inject constructor(
         }
     }
 
-    fun addSet(name: String) {
+    fun addSet(cardSet: CardSet) {
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.insertCardSet(CardSet(name = name))
+            localDataSourceRepositoryImpl.insertCardSet(CardSet(name = cardSet.name))
+        }
+    }
+
+    fun updateSet(cardSet: CardSet) {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSourceRepositoryImpl.updateCardSet(cardSet)
         }
     }
 
