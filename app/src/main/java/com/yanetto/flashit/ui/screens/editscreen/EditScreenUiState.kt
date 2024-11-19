@@ -5,7 +5,7 @@ import com.yanetto.flashit.domain.model.Card
 data class EditScreenUiState (
     val currentCard: Card =
         Card(
-            question = "Введите вопрос",
-            answer = "Введите ответ"
+            question = "",
+            answer = ""
         )
 )

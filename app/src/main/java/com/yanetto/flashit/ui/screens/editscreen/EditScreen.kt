@@ -3,7 +3,6 @@ package com.yanetto.flashit.ui.screens.editscreen
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -101,7 +100,8 @@ fun EditScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = uiState.value.currentCard.question,
                 onValueChange = { viewModel.changeQuestion(it) },
-                textStyle = MaterialTheme.typography.titleSmall
+                textStyle = MaterialTheme.typography.titleSmall,
+                hint = "Введите вопрос"
             )
 
             EditTextField(
@@ -110,7 +110,8 @@ fun EditScreen(
                     .weight(1f),
                 value = uiState.value.currentCard.answer,
                 onValueChange = { viewModel.changeAnswer(it) },
-                textStyle = MaterialTheme.typography.bodyMedium
+                textStyle = MaterialTheme.typography.bodyMedium,
+                hint = "Введите ответ"
             )
 
             Row(
@@ -137,7 +138,6 @@ fun EditScreen(
                             if (uiState.value.currentCard.id == 0) viewModel.addCard(uiState.value.currentCard)
                             else viewModel.updateCard(uiState.value.currentCard)
                             onDoneClick(uiState.value.currentCard.setId)
-                            //viewModel.reset()
                         }
                 )
             }
@@ -148,45 +148,49 @@ fun EditScreen(
 @Composable
 fun EditTextField(
     modifier: Modifier = Modifier,
+    hint: String,
     value: String,
     textStyle: TextStyle,
     onValueChange: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    var textValue by remember { mutableStateOf(TextFieldValue("")) }
     val interactionSource = remember { MutableInteractionSource() }
-    val isFocused = interactionSource.collectIsFocusedAsState()
 
-    LaunchedEffect(isFocused.value) {
-        if (isFocused.value) textValue = TextFieldValue("")
+    // Синхронизируем textValue с value
+    var textValue by remember { mutableStateOf(TextFieldValue(value)) }
+    LaunchedEffect(value) {
+        if (textValue.text != value) {
+            textValue = TextFieldValue(value)
+        }
     }
 
     val color = MaterialTheme.colorScheme.onBackground
     val hintColor =
-        if (isFocused.value) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+        if (textValue.text.isEmpty()) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
         else MaterialTheme.colorScheme.onSurface
 
     BasicTextField(
         value = textValue,
         onValueChange = {
             textValue = it
-            onValueChange(it.text) },
+            onValueChange(it.text)
+        },
         singleLine = false,
         modifier = modifier.padding(8.dp),
         textStyle = textStyle.copy(textAlign = TextAlign.Start, color = color),
         interactionSource = interactionSource,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        keyboardActions = KeyboardActions(onDone  = {
+        keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
         }),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
-    ){
+    ) {
         Box(
             modifier = Modifier.fillMaxWidth()
-        ){
-            if(textValue.text.isEmpty()){
+        ) {
+            if (textValue.text.isEmpty()) {
                 Text(
-                    text = value,
+                    text = hint,
                     style = textStyle,
                     color = hintColor,
                     modifier = Modifier.align(Alignment.TopStart)
