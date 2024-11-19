@@ -78,4 +78,10 @@ class EditScreenViewModel @Inject constructor(
             localDataSourceRepository.updateCard(card)
         }
     }
+
+    fun deleteCard(card: Card) {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSourceRepository.deleteCard(card)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.yanetto.flashit.ui.screens.cardsetscreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -60,6 +61,8 @@ fun CardSetScreen(
     val uiState = viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(DialogType.NONE) }
     var isPopupVisible by remember { mutableStateOf(false) }
+
+    BackHandler { }
 
     EditPopup(
         isVisible = isPopupVisible,
