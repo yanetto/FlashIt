@@ -36,7 +36,7 @@ class RoomLocalDataSource @Inject constructor(
         }
     }
 
-    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards> {
+    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards?> {
         return cardDao.getCardSetWithCards(setId)
     }
 
@@ -53,7 +53,15 @@ class RoomLocalDataSource @Inject constructor(
         cardSetDao.deleteCardSet(cardSet.toCardSetEntity())
     }
 
-    override fun getCardSetByIdFlow(id: Int): Flow<CardSet> {
+    override suspend fun deleteCardsBySetId(setId: Int) {
+        cardSetDao.deleteCardsBySetId(setId)
+    }
+
+    override suspend fun deleteCardSetWithCards(cardSet: CardSet) {
+        cardSetDao.deleteCardSetWithCards(cardSet.toCardSetEntity())
+    }
+
+    override fun getCardSetByIdFlow(id: Int): Flow<CardSet?> {
         return cardSetDao.getCardSetById(id).map { cardSetEntity ->
             cardSetEntity.toCardSet()
         }

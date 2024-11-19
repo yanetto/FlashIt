@@ -26,5 +26,5 @@ interface CardDao {
 
     @Transaction
     @Query("SELECT * FROM CardSetEntity WHERE id = :setId")
-    fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards>
+    fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards?>
 }

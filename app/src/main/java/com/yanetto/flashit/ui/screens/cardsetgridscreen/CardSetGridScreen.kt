@@ -1,6 +1,8 @@
 package com.yanetto.flashit.ui.screens.cardsetgridscreen
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,9 +36,16 @@ import com.yanetto.flashit.R
 fun CardSetGridScreen(
     modifier: Modifier = Modifier,
     setId: Int? = null,
+    onEditClick: (Int) -> Unit,
+    onCreateClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
     viewModel: CardSetGridScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
+    BackHandler {
+        onBackClick()
+    }
 
     LaunchedEffect(setId) {
         if (setId != null) {
@@ -80,7 +89,10 @@ fun CardSetGridScreen(
                 Card(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            onEditClick(uiState.value.cards[i].id)
+                        },
                     shape = MaterialTheme.shapes.medium,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -88,7 +100,9 @@ fun CardSetGridScreen(
                     )
                 ) {
                     Box(
-                        modifier = Modifier.padding(horizontal = 16.dp).height(175.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .height(175.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -105,7 +119,10 @@ fun CardSetGridScreen(
                 Card(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            onCreateClick(uiState.value.setId)
+                        },
                     shape = MaterialTheme.shapes.medium,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondary,
@@ -113,7 +130,10 @@ fun CardSetGridScreen(
                     )
                 ) {
                     Box(
-                        modifier = Modifier.padding(horizontal = 16.dp).height(175.dp).fillMaxSize(),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .height(175.dp)
+                            .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(

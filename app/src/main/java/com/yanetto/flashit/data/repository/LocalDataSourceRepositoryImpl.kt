@@ -19,7 +19,7 @@ class LocalDataSourceRepositoryImpl @Inject constructor(
 
     override fun getCardByIdFlow(id: Int): Flow<Card> = localDatasource.getCardByIdFlow(id)
 
-    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards> = localDatasource.getCardSetWithCards(setId)
+    override fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards?> = localDatasource.getCardSetWithCards(setId)
 
     override suspend fun insertCardSet(cardSet: CardSet) = localDatasource.insertCardSet(cardSet)
 
@@ -27,7 +27,11 @@ class LocalDataSourceRepositoryImpl @Inject constructor(
 
     override suspend fun deleteCardSet(cardSet: CardSet) = localDatasource.deleteCardSet(cardSet)
 
-    override fun getCardSetByIdFlow(id: Int): Flow<CardSet> = localDatasource.getCardSetByIdFlow(id)
+    override suspend fun deleteCardsBySetId(setId: Int) = localDatasource.deleteCardsBySetId(setId)
+
+    override suspend fun deleteCardSetWithCards(cardSet: CardSet) = localDatasource.deleteCardSetWithCards(cardSet)
+
+    override fun getCardSetByIdFlow(id: Int): Flow<CardSet?> = localDatasource.getCardSetByIdFlow(id)
 
     override fun getAllCardSetsFlow(): Flow<List<CardSet>> = localDatasource.getAllCardSetsFlow()
 }

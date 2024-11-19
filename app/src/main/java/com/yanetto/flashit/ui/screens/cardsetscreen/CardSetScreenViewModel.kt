@@ -2,8 +2,8 @@ package com.yanetto.flashit.ui.screens.cardsetscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yanetto.flashit.data.repository.LocalDataSourceRepositoryImpl
 import com.yanetto.flashit.domain.model.CardSet
+import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,17 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CardSetScreenViewModel @Inject constructor(
-    private val localDataSourceRepositoryImpl: LocalDataSourceRepositoryImpl
+    private val localDataSourceRepository: LocalDataSourceRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CardSetScreenUiState())
     val uiState: StateFlow<CardSetScreenUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            localDataSourceRepositoryImpl.getAllCardSetsFlow().collect { cardSets ->
-                _uiState.update { currentState ->
-                    currentState.copy(cardSets = cardSets)
-                }
+            localDataSourceRepository.getAllCardSetsFlow()
+                .collect { cardSets ->
+                    _uiState.update { currentState ->
+                        currentState.copy(cardSets = cardSets)
+                    }
             }
         }
     }
@@ -38,13 +39,13 @@ class CardSetScreenViewModel @Inject constructor(
 
     fun addSet(cardSet: CardSet) {
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.insertCardSet(CardSet(name = cardSet.name))
+            localDataSourceRepository.insertCardSet(CardSet(name = cardSet.name))
         }
     }
 
     fun updateSet(cardSet: CardSet) {
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.updateCardSet(cardSet)
+            localDataSourceRepository.updateCardSet(cardSet)
         }
     }
 
@@ -58,7 +59,7 @@ class CardSetScreenViewModel @Inject constructor(
 
     fun deleteSet(cardSet: CardSet) {
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.deleteCardSet(cardSet)
+            localDataSourceRepository.deleteCardSetWithCards(cardSet)
         }
     }
 }

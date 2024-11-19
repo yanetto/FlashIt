@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.yanetto.flashit.data.source.local.model.CardSetEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,15 @@ interface CardSetDao {
 
     @Delete
     fun deleteCardSet(cardSet: CardSetEntity)
+
+    @Query("DELETE FROM cardentity WHERE setId = :setId")
+    fun deleteCardsBySetId(setId: Int)
+
+    @Transaction
+    fun deleteCardSetWithCards(cardSet: CardSetEntity) {
+        deleteCardsBySetId(cardSet.id)
+        deleteCardSet(cardSet)
+    }
 
     @Query("SELECT * FROM cardsetentity WHERE id = :id")
     fun getCardSetById(id: Int): Flow<CardSetEntity>

@@ -1,21 +1,24 @@
 package com.yanetto.flashit.ui.screens.cardsetgridscreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yanetto.flashit.data.mapper.toCard
-import com.yanetto.flashit.data.repository.LocalDataSourceRepositoryImpl
+import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CardSetGridScreenViewModel @Inject constructor(
-    private val localDataSourceRepositoryImpl: LocalDataSourceRepositoryImpl
+    private val localDataSourceRepository: LocalDataSourceRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(CardSetGridScreenUiState())
     val uiState: StateFlow<CardSetGridScreenUiState> = _uiState.asStateFlow()
@@ -26,22 +29,35 @@ class CardSetGridScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.getCardSetWithCards(setId)
-                .collect { cardSetWithCards ->
+            localDataSourceRepository.getCardSetWithCards(setId)
+                .map { cardSetWithCards ->
+                    cardSetWithCards?.cards?.map { it.toCard() } ?: emptyList()
+                }
+                .catch { exception ->
+                    Log.e("CARD_SET_ERROR", "Error fetching cards: ${exception.message}")
+                    emit(emptyList())
+                }
+                .collect { cards ->
                     _uiState.update { currentState ->
-                        currentState.copy(
-                            cards = cardSetWithCards.cards.map { it.toCard() }
-                        )
+                        currentState.copy(cards = cards)
                     }
                 }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            localDataSourceRepositoryImpl.getCardSetByIdFlow(setId).collect { cardSet ->
-                _uiState.update { currentState ->
-                    currentState.copy(setName = cardSet.name)
+            localDataSourceRepository.getCardSetByIdFlow(setId)
+                .map { cardSet ->
+                    cardSet?.name ?: ""
                 }
-            }
+                .catch { exception ->
+                    Log.e("CARD_SET_ERROR", "Error fetching card set: ${exception.message}")
+                    emit("")
+                }
+                .collect { setName ->
+                    _uiState.update { currentState ->
+                        currentState.copy(setName = setName)
+                    }
+                }
         }
     }
 }

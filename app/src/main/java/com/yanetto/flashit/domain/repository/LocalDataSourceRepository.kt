@@ -15,7 +15,7 @@ interface LocalDataSourceRepository {
 
     fun getCardByIdFlow(id: Int): Flow<Card>
 
-    fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards>
+    fun getCardSetWithCards(setId: Int): Flow<CardSetWithCards?>
 
     //CardSet
     suspend fun insertCardSet(cardSet: CardSet)
@@ -24,7 +24,11 @@ interface LocalDataSourceRepository {
 
     suspend fun deleteCardSet(cardSet: CardSet)
 
-    fun getCardSetByIdFlow(id: Int): Flow<CardSet>
+    suspend fun deleteCardsBySetId(setId: Int)
+
+    suspend fun deleteCardSetWithCards(cardSet: CardSet)
+
+    fun getCardSetByIdFlow(id: Int): Flow<CardSet?>
 
     fun getAllCardSetsFlow(): Flow<List<CardSet>>
 }

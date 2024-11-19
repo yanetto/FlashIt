@@ -5,8 +5,26 @@ import com.yanetto.flashit.data.source.local.model.CardSetEntity
 import com.yanetto.flashit.domain.model.Card
 import com.yanetto.flashit.domain.model.CardSet
 
-fun CardEntity.toCard() = Card(id, question, answer, setId)
-fun Card.toCardEntity() = CardEntity(id, question, answer, setId)
+fun CardEntity?.toCard() = Card(
+    this?.id ?: 0,
+    this?.question ?: "",
+    this?.answer ?: "",
+    this?.setId ?: 0
+)
 
-fun CardSetEntity.toCardSet() = CardSet(id, name)
-fun CardSet.toCardSetEntity() = CardSetEntity(id, name)
+fun Card?.toCardEntity() = CardEntity(
+    this?.id ?: 0,
+    this?.question ?: "",
+    this?.answer ?: "",
+    this?.setId ?: 0
+)
+
+fun CardSetEntity?.toCardSet() = CardSet(
+    this?.id ?: 0,
+    this?.name ?: ""
+)
+
+fun CardSet?.toCardSetEntity() = CardSetEntity(
+    this?.id ?: 0,
+    this?.name ?: ""
+)

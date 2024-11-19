@@ -92,7 +92,7 @@ fun CardScreen(
                     .clickable { }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.dont_know),
+                    painter = painterResource(id = R.drawable.close),
                     contentDescription = null,
                     modifier = Modifier
                         .size(50.dp)
@@ -108,7 +108,7 @@ fun CardScreen(
                     .clickable { }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.know),
+                    painter = painterResource(id = R.drawable.check),
                     contentDescription = null,
                     modifier = Modifier
                         .size(50.dp)

@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yanetto.flashit.ui.screens.cardscreen.CardScreen
 import com.yanetto.flashit.ui.screens.cardsetgridscreen.CardSetGridScreen
 import com.yanetto.flashit.ui.screens.cardsetscreen.CardSetScreen
+import com.yanetto.flashit.ui.screens.editscreen.EditScreen
 
 enum class AppScreen {
     Home,
@@ -60,11 +61,45 @@ fun FlashItApp(
             ) { backStackEntry ->
                 val setId = backStackEntry.arguments?.getString("setId")?.toIntOrNull()
                 setId?.let {
-                    CardSetGridScreen(setId = it)
+                    CardSetGridScreen(
+                        setId = it,
+                        onEditClick = { cardId ->
+                            navController.navigate("${AppScreen.Edit.name}/card/$cardId")
+                        },
+                        onCreateClick = { setId ->
+                            navController.navigate("${AppScreen.Edit.name}/set/$setId")
+                        },
+                        onBackClick = { navController.navigate(AppScreen.Home.name) }
+                    )
                 }
             }
 
-            composable(route = AppScreen.Edit.name) {
+            composable(
+                route = "${AppScreen.Edit.name}/card/{cardId}"
+            ) { backStackEntry ->
+                val cardId = backStackEntry.arguments?.getString("cardId")?.toIntOrNull()
+                cardId?.let {
+                    EditScreen(
+                        cardId = it,
+                        onDoneClick = { setId ->
+                            navController.navigate("${AppScreen.Grid.name}/$setId")
+                        }
+                    )
+                }
+            }
+
+            composable(
+                route = "${AppScreen.Edit.name}/set/{setId}"
+            ) { backStackEntry ->
+                val setId = backStackEntry.arguments?.getString("setId")?.toIntOrNull()
+                setId?.let {
+                    EditScreen(
+                        setId = it,
+                        onDoneClick = { setId ->
+                            navController.navigate("${AppScreen.Grid.name}/$setId")
+                        }
+                    )
+                }
             }
         }
     }
