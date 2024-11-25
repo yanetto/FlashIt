@@ -1,7 +1,10 @@
 package com.yanetto.flashit.ui.screens.cardscreen
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,9 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,17 +40,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.flashit.R
 
 @Composable
 fun CardScreen(
+    setId: Int? = null,
     modifier: Modifier = Modifier,
-    viewModel: CardScreenViewModel = hiltViewModel()
+    viewModel: CardScreenViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    var offsetX by remember { mutableFloatStateOf(0f) }
+
+    BackHandler {
+        onBackClick()
+    }
+
+    LaunchedEffect(setId) {
+        if (setId != null) {
+            Log.d("SET_ID", setId.toString())
+            viewModel.updateSetId(setId)
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -56,7 +74,7 @@ fun CardScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f),
-            text = "Подготовка к себесу",
+            text = uiState.value.setName,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
@@ -64,74 +82,132 @@ fun CardScreen(
 
         Spacer(modifier = Modifier.size(16.dp))
 
+        val counter = "${uiState.value.currentCardIndex + 1}/${uiState.value.cards.size}"
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f),
-            text = "1/10",
+            text = counter,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        RotatingCard(viewModel = viewModel)
+        if (!uiState.value.showFinishScreen) {
+            RotatingCard(
+                viewModel = viewModel,
+                offsetX = offsetX,
+                onResetOffset = { offsetX = 0f }
+            )
 
-        Spacer(modifier = Modifier.size(32.dp))
+            Spacer(modifier = Modifier.size(32.dp))
 
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-
-            Card (
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.close),
-                    contentDescription = null,
+                Spacer(modifier = Modifier.weight(1f))
+
+                Card(
                     modifier = Modifier
-                        .size(50.dp)
-                        .padding(4.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                        .clickable {
+                            offsetX = -1000f
+                            viewModel.addCard(uiState.value.currentCard)
+                        },
+                    colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.close),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp)
+                            .padding(4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(2.5f))
+
+                Card(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                        .clickable {
+                            offsetX = 1000f
+                        },
+                    colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.check),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp)
+                            .padding(4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.size(32.dp))
+
+            Text(
+                text = stringResource(R.string.tap_on_card_to_flip_it),
+                color = MaterialTheme.colorScheme.tertiary,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f),
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(8f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Все карточки изучены!",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(modifier = Modifier.weight(2.5f))
+            Spacer(modifier = Modifier.size(32.dp))
 
-            Card (
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { }
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.check),
-                    contentDescription = null,
+                Card(
                     modifier = Modifier
-                        .size(50.dp)
-                        .padding(4.dp)
-                )
+                        .clip(CircleShape)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                        .clickable {
+                            onBackClick()
+                        },
+                    colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                ) {
+                    Text(
+                        text = "Продолжить",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.size(32.dp))
         }
-
-        Spacer(modifier = Modifier.size(32.dp))
-
-        Text(
-            text = stringResource(R.string.tap_on_card_to_flip_it),
-            color = MaterialTheme.colorScheme.tertiary,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.5f),
-            textAlign = TextAlign.Center
-        )
     }
 }
+
 
 const val ANIMATION_DURATION = 600
 const val FULL_TURN = 360
@@ -139,16 +215,31 @@ const val HALF_TURN = 180
 const val DENSITY_MULTIPLIER = 12
 
 @Composable
-fun ColumnScope.RotatingCard (
-    viewModel: CardScreenViewModel
+fun ColumnScope.RotatingCard(
+    viewModel: CardScreenViewModel,
+    offsetX: Float,
+    onResetOffset: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    var rotationAngle by remember { mutableStateOf(0f) }
+    var rotationAngle by remember { mutableFloatStateOf(0f) }
 
     val rotation by animateFloatAsState(
         targetValue = rotationAngle,
         animationSpec = tween(durationMillis = ANIMATION_DURATION),
         label = "RotateAnimation"
+    )
+
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = offsetX,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
+        finishedListener = {
+            if (offsetX != 0f) {
+                if (rotationAngle % FULL_TURN != 0f) rotationAngle += HALF_TURN
+                viewModel.nextCard()
+                onResetOffset()
+            }
+        },
+        label = "OffsetAnimation"
     )
 
     Card(
@@ -161,9 +252,9 @@ fun ColumnScope.RotatingCard (
             .fillMaxWidth()
             .weight(8f)
             .graphicsLayer {
+                translationX = animatedOffsetX
                 rotationY = rotation % FULL_TURN
-                cameraDistance =
-                    DENSITY_MULTIPLIER * density
+                cameraDistance = DENSITY_MULTIPLIER * density
             }
             .clickable { rotationAngle += HALF_TURN }
     ) {
@@ -179,7 +270,7 @@ fun ColumnScope.RotatingCard (
         ) {
             if ((rotation % FULL_TURN) < HALF_TURN * 0.5f || (rotation % FULL_TURN) >= FULL_TURN * 0.75f) {
                 Text(
-                    text = uiState.value.question,
+                    text = uiState.value.currentCard.question,
                     color = Color.Black,
                     style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Center,
@@ -188,7 +279,7 @@ fun ColumnScope.RotatingCard (
                 )
             } else {
                 Text(
-                    text = uiState.value.answer,
+                    text = uiState.value.currentCard.answer,
                     color = Color.Black,
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Start,
@@ -199,11 +290,4 @@ fun ColumnScope.RotatingCard (
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun CardScreenPreview() {
-    CardScreen()
 }

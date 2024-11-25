@@ -55,7 +55,7 @@ enum class DialogType {
 fun CardSetScreen(
     modifier: Modifier = Modifier,
     onCardSetEditClick: (Int) -> Unit,
-    onCardSetPlayClick: () -> Unit,
+    onCardSetPlayClick: (Int) -> Unit,
     viewModel: CardSetScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -175,7 +175,7 @@ fun CardSetScreen(
                             modifier = Modifier
                                 .size(28.dp)
                                 .clip(CircleShape)
-                                .clickable { onCardSetPlayClick() }
+                                .clickable { onCardSetPlayClick(cardSet.id) }
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Icon(

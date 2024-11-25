@@ -48,12 +48,22 @@ fun FlashItApp(
                     onCardSetEditClick = { setId ->
                         navController.navigate("${AppScreen.Grid.name}/$setId")
                     },
-                    onCardSetPlayClick = { navController.navigate(AppScreen.Learn.name) }
+                    onCardSetPlayClick = { setId ->
+                        navController.navigate("${AppScreen.Learn.name}/$setId")
+                    }
                 )
             }
 
-            composable(route = AppScreen.Learn.name) {
-                CardScreen()
+            composable(
+                route = "${AppScreen.Learn.name}/{setId}"
+            ) { backStackEntry ->
+                val setId = backStackEntry.arguments?.getString("setId")?.toIntOrNull()
+                setId?.let {
+                    CardScreen(
+                        setId = setId,
+                        onBackClick = { navController.navigate(AppScreen.Home.name) }
+                    )
+                }
             }
 
             composable(

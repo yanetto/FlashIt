@@ -34,7 +34,7 @@ class CardSetGridScreenViewModel @Inject constructor(
                     cardSetWithCards?.cards?.map { it.toCard() } ?: emptyList()
                 }
                 .catch { exception ->
-                    Log.e("CARD_SET_ERROR", "Error fetching cards: ${exception.message}")
+                    Log.e("CARD_SET_ERROR", exception.message.toString())
                     emit(emptyList())
                 }
                 .collect { cards ->
@@ -50,7 +50,7 @@ class CardSetGridScreenViewModel @Inject constructor(
                     cardSet?.name ?: ""
                 }
                 .catch { exception ->
-                    Log.e("CARD_SET_ERROR", "Error fetching card set: ${exception.message}")
+                    Log.e("CARD_SET_ERROR", exception.message.toString())
                     emit("")
                 }
                 .collect { setName ->
