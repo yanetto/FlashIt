@@ -67,7 +67,7 @@ class CardScreenViewModel @Inject constructor(
                 }
                 .collect { cards ->
                     val shuffledCards = cards.shuffled()
-                    if (cards.isNotEmpty()) {
+                    if (_uiState.value.currentCardIndex < cards.size ) {
                         _uiState.update { currentState ->
                             currentState.copy(
                                 cards = shuffledCards,
