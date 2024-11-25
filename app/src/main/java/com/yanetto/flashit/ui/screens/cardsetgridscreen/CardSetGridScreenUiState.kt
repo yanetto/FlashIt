@@ -1,6 +1,6 @@
 package com.yanetto.flashit.ui.screens.cardsetgridscreen
 
-import com.yanetto.flashit.domain.model.Card
+import com.yanetto.flashit.core.domain.model.Card
 
 data class CardSetGridScreenUiState (
     val setId: Int = 0,

@@ -3,8 +3,8 @@ package com.yanetto.flashit.ui.screens.cardsetgridscreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yanetto.flashit.data.mapper.toCard
-import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
+import com.yanetto.flashit.core.data.mapper.toCard
+import com.yanetto.flashit.core.domain.repository.LocalDataSourceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

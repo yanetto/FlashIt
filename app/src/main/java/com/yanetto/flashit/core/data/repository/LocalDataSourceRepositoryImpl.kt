@@ -1,10 +1,10 @@
-package com.yanetto.flashit.data.repository
+package com.yanetto.flashit.core.data.repository
 
-import com.yanetto.flashit.data.source.local.LocalDataSource
-import com.yanetto.flashit.domain.model.Card
-import com.yanetto.flashit.domain.model.CardSet
-import com.yanetto.flashit.domain.model.CardSetWithCards
-import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
+import com.yanetto.flashit.core.data.source.local.LocalDataSource
+import com.yanetto.flashit.core.domain.model.Card
+import com.yanetto.flashit.core.domain.model.CardSet
+import com.yanetto.flashit.core.domain.model.CardSetWithCards
+import com.yanetto.flashit.core.domain.repository.LocalDataSourceRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

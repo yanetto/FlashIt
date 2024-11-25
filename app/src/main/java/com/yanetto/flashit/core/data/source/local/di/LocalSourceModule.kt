@@ -1,12 +1,12 @@
-package com.yanetto.flashit.data.source.local.di
+package com.yanetto.flashit.core.data.source.local.di
 
 import android.content.Context
 import androidx.room.Room
-import com.yanetto.flashit.data.repository.LocalDataSourceRepositoryImpl
-import com.yanetto.flashit.data.source.local.LocalDataSource
-import com.yanetto.flashit.data.source.local.RoomLocalDataSource
-import com.yanetto.flashit.data.source.local.db.CardsRoomDatabase
-import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
+import com.yanetto.flashit.core.data.repository.LocalDataSourceRepositoryImpl
+import com.yanetto.flashit.core.data.source.local.LocalDataSource
+import com.yanetto.flashit.core.data.source.local.RoomLocalDataSource
+import com.yanetto.flashit.core.data.source.local.db.CardsRoomDatabase
+import com.yanetto.flashit.core.domain.repository.LocalDataSourceRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

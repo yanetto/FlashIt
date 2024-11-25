@@ -1,9 +1,9 @@
-package com.yanetto.flashit.data.mapper
+package com.yanetto.flashit.core.data.mapper
 
-import com.yanetto.flashit.data.source.local.model.CardEntity
-import com.yanetto.flashit.data.source.local.model.CardSetEntity
-import com.yanetto.flashit.domain.model.Card
-import com.yanetto.flashit.domain.model.CardSet
+import com.yanetto.flashit.core.data.source.local.model.CardEntity
+import com.yanetto.flashit.core.data.source.local.model.CardSetEntity
+import com.yanetto.flashit.core.domain.model.Card
+import com.yanetto.flashit.core.domain.model.CardSet
 
 fun CardEntity?.toCard() = Card(
     this?.id ?: 0,

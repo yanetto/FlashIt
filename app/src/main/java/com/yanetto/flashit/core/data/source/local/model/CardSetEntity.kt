@@ -1,4 +1,4 @@
-package com.yanetto.flashit.data.source.local.model
+package com.yanetto.flashit.core.data.source.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

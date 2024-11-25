@@ -2,8 +2,8 @@ package com.yanetto.flashit.ui.screens.cardsetscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yanetto.flashit.domain.model.CardSet
-import com.yanetto.flashit.domain.repository.LocalDataSourceRepository
+import com.yanetto.flashit.core.domain.model.CardSet
+import com.yanetto.flashit.core.domain.repository.LocalDataSourceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

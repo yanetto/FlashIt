@@ -1,14 +1,14 @@
-package com.yanetto.flashit.data.source.local
+package com.yanetto.flashit.core.data.source.local
 
-import com.yanetto.flashit.data.mapper.toCard
-import com.yanetto.flashit.data.mapper.toCardEntity
-import com.yanetto.flashit.data.mapper.toCardSet
-import com.yanetto.flashit.data.mapper.toCardSetEntity
-import com.yanetto.flashit.data.source.local.dao.CardDao
-import com.yanetto.flashit.data.source.local.dao.CardSetDao
-import com.yanetto.flashit.domain.model.Card
-import com.yanetto.flashit.domain.model.CardSet
-import com.yanetto.flashit.domain.model.CardSetWithCards
+import com.yanetto.flashit.core.data.mapper.toCard
+import com.yanetto.flashit.core.data.mapper.toCardEntity
+import com.yanetto.flashit.core.data.mapper.toCardSet
+import com.yanetto.flashit.core.data.mapper.toCardSetEntity
+import com.yanetto.flashit.core.data.source.local.dao.CardDao
+import com.yanetto.flashit.core.data.source.local.dao.CardSetDao
+import com.yanetto.flashit.core.domain.model.Card
+import com.yanetto.flashit.core.domain.model.CardSet
+import com.yanetto.flashit.core.domain.model.CardSetWithCards
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

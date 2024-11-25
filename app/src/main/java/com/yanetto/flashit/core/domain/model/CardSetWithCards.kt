@@ -1,9 +1,9 @@
-package com.yanetto.flashit.domain.model
+package com.yanetto.flashit.core.domain.model
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.yanetto.flashit.data.source.local.model.CardEntity
-import com.yanetto.flashit.data.source.local.model.CardSetEntity
+import com.yanetto.flashit.core.data.source.local.model.CardEntity
+import com.yanetto.flashit.core.data.source.local.model.CardSetEntity
 
 data class CardSetWithCards(
     @Embedded val cardSet: CardSetEntity,

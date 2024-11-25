@@ -1,8 +1,8 @@
-package com.yanetto.flashit.data.source.local
+package com.yanetto.flashit.core.data.source.local
 
-import com.yanetto.flashit.domain.model.Card
-import com.yanetto.flashit.domain.model.CardSet
-import com.yanetto.flashit.domain.model.CardSetWithCards
+import com.yanetto.flashit.core.domain.model.Card
+import com.yanetto.flashit.core.domain.model.CardSet
+import com.yanetto.flashit.core.domain.model.CardSetWithCards
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {

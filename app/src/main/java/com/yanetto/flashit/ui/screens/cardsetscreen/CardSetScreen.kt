@@ -43,7 +43,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.flashit.R
-import com.yanetto.flashit.domain.model.CardSet
+import com.yanetto.flashit.core.domain.model.CardSet
 
 enum class DialogType {
     NONE,
