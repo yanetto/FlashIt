@@ -48,7 +48,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.flashit.R
-import com.yanetto.flashit.ui.screens.cardsetscreen.SimpleTextButton
 
 @Composable
 fun EditScreen(
@@ -260,21 +259,21 @@ fun EditPopup(
                 ) {
                     Card {
                         Column {
-                            SimpleTextButton(
+                            com.yanetto.card_set_managment.presentation.SimpleTextButton(
                                 text = "Скопировать текст",
                                 onClick = { onCopyButtonClick(); onDismiss() },
                                 painter = painterResource(id = R.drawable.copy),
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             )
 
-                            SimpleTextButton(
+                            com.yanetto.card_set_managment.presentation.SimpleTextButton(
                                 text = "Сгенерировать ответ",
                                 onClick = { onGenerateButtonClick(); onDismiss() },
                                 painter = painterResource(id = R.drawable.generate),
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             )
 
-                            SimpleTextButton(
+                            com.yanetto.card_set_managment.presentation.SimpleTextButton(
                                 text = "Удалить",
                                 onClick = { onDeleteButtonClick(); onDismiss() },
                                 color = MaterialTheme.colorScheme.error,
@@ -287,7 +286,7 @@ fun EditPopup(
                     Spacer(modifier = Modifier.size(16.dp))
 
                     Card {
-                        SimpleTextButton(
+                        com.yanetto.card_set_managment.presentation.SimpleTextButton(
                             text = "Закрыть",
                             onClick = onDismiss,
                             modifier = Modifier.padding(horizontal = 8.dp)

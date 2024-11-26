@@ -1,6 +1,6 @@
 package com.yanetto.flashit.ui.screens.cardscreen
 
-import com.yanetto.flashit.core.domain.model.Card
+import com.yanetto.core.domain.model.Card
 
 data class CardScreenUiState (
     val cards: List<Card> = listOf(),

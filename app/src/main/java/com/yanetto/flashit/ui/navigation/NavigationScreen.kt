@@ -13,9 +13,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.yanetto.card_set_managment.presentation.CardSetScreen
 import com.yanetto.flashit.ui.screens.cardscreen.CardScreen
 import com.yanetto.flashit.ui.screens.cardsetgridscreen.CardSetGridScreen
-import com.yanetto.flashit.ui.screens.cardsetscreen.CardSetScreen
 import com.yanetto.flashit.ui.screens.editscreen.EditScreen
 
 enum class AppScreen {
