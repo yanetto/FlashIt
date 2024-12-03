@@ -23,3 +23,6 @@ rootProject.name = "FlashIt"
 include(":app")
 include(":core")
 include(":card_set_managment")
+include(":card_grid")
+include(":card_editor")
+include(":card_learn")
