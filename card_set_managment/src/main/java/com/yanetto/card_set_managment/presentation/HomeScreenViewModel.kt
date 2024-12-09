@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CardSetScreenViewModel @Inject constructor(
+class HomeScreenViewModel @Inject constructor(
     private val deleteSetUseCase: DeleteSetUseCase,
     private val updateSetUseCase: UpdateSetUseCase,
     private val insertSetUseCase: InsertSetUseCase,
     getAllSetsUseCase: GetAllSetsUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(CardSetScreenUiState())
-    val uiState: StateFlow<CardSetScreenUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(HomeScreenUiState())
+    val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {

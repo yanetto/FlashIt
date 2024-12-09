@@ -33,13 +33,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.card_grid.R
 
 @Composable
-fun CardSetGridScreen(
+fun GridScreen(
     modifier: Modifier = Modifier,
     setId: Int? = null,
     onEditClick: (Int) -> Unit,
     onCreateClick: (Int) -> Unit,
     onBackClick: () -> Unit,
-    viewModel: CardSetGridScreenViewModel = hiltViewModel()
+    viewModel: GridScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
 

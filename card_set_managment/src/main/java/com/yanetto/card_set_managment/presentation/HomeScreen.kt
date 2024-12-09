@@ -52,11 +52,11 @@ enum class DialogType {
 }
 
 @Composable
-fun CardSetScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     onCardSetEditClick: (Int) -> Unit,
     onCardSetPlayClick: (Int) -> Unit,
-    viewModel: CardSetScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(DialogType.NONE) }
@@ -200,7 +200,7 @@ fun CardSetScreen(
 fun EnterNameDialog(
     text: String,
     currentName: String,
-    viewModel: CardSetScreenViewModel,
+    viewModel: HomeScreenViewModel,
     onDismiss: () -> Unit = {},
     onConfirmClick: (CardSet) -> Unit = {}
 ) {

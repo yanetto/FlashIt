@@ -18,12 +18,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CardSetGridScreenViewModel @Inject constructor(
+class GridScreenViewModel @Inject constructor(
     private val getCardSetWithCardsUseCase: GetCardSetWithCardsUseCase,
     private val getCardSetByIdUseCase: GetCardSetByIdUseCase
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(CardSetGridScreenUiState())
-    val uiState: StateFlow<CardSetGridScreenUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(GridScreenUiState())
+    val uiState: StateFlow<GridScreenUiState> = _uiState.asStateFlow()
 
     fun updateSetId(setId: Int) {
         _uiState.update { currentState ->
