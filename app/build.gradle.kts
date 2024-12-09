@@ -55,9 +55,8 @@ android {
 dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.compose)
-    implementation(project(":card_set_managment"))
-    implementation(project(":card_set_managment"))
     implementation(project(":core"))
+    implementation(project(":card_set_management"))
     implementation(project(":card_grid"))
     implementation(project(":card_editor"))
     implementation(project(":card_learn"))

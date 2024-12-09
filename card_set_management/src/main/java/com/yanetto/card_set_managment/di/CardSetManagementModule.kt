@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class CardSetScreenModule {
+abstract class CardSetManagementModule {
     @Binds
     abstract fun bindDeleteSetUseCase(
         deleteSetUseCaseImpl: DeleteSetUseCaseImpl
