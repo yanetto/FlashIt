@@ -1,26 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
-    namespace = "com.yanetto.flashit"
+    namespace = "com.yanetto.card_set_managment"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yanetto.flashit"
         minSdk = 27
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -45,26 +37,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.compose)
-    implementation(project(":core"))
-    implementation(project(":card_set_management"))
-    implementation(project(":card_grid"))
-    implementation(project(":card_editor"))
-    implementation(project(":card_learn"))
     kapt(libs.hilt.android.compiler)
-
-    ksp(libs.androidx.room.compiler)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -74,17 +52,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(project(":core"))
     implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 kapt {

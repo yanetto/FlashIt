@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">FlashIt</string>
-
-    <string name="tap_on_card_to_flip_it">Нажмите на карточку, чтобы перевернуть ее</string>
 </resources>
