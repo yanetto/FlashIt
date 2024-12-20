@@ -93,7 +93,7 @@ fun EditScreen(
             clipboardManager.setPrimaryClip(text)
         },
 
-        onGenerateButtonClick = {  },
+        onGenerateButtonClick = { viewModel.getGptResponse() },
         onDismiss = { isPopupVisible = false }
     )
 

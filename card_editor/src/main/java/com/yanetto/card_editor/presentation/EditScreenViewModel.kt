@@ -8,6 +8,7 @@ import com.yanetto.card_editor.domain.GetCardByIdUseCase
 import com.yanetto.card_editor.domain.InsertCardUseCase
 import com.yanetto.card_editor.domain.UpdateCardUseCase
 import com.yanetto.core.domain.model.Card
+import com.yanetto.network.data.repository.GptRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ class EditScreenViewModel @Inject constructor(
     private val insertCardUseCase: InsertCardUseCase,
     private val deleteCardUseCase: DeleteCardUseCase,
     private val updateCardUseCase: UpdateCardUseCase,
-    private val getCardByIdUseCase: GetCardByIdUseCase
+    private val getCardByIdUseCase: GetCardByIdUseCase,
+    private val gptRepository: GptRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EditScreenUiState())
     val uiState: StateFlow<EditScreenUiState> = _uiState.asStateFlow()
@@ -88,6 +90,26 @@ class EditScreenViewModel @Inject constructor(
     fun deleteCard(card: Card) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteCardUseCase(card)
+        }
+    }
+
+    fun getGptResponse() {
+        viewModelScope.launch {
+            try {
+                val response = gptRepository.getGptResponse(uiState.value.currentCard.question)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        currentCard = currentState.currentCard.copy(answer = response)
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("GPT_ERROR", e.stackTraceToString())
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        currentCard = currentState.currentCard.copy(answer = "ERROR")
+                    )
+                }
+            }
         }
     }
 }
