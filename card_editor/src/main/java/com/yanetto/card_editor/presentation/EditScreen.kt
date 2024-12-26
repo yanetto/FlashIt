@@ -4,6 +4,13 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +24,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,8 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -93,7 +104,7 @@ fun EditScreen(
             clipboardManager.setPrimaryClip(text)
         },
 
-        onGenerateButtonClick = { viewModel.getGptResponse() },
+        onGenerateButtonClick = { viewModel.changeIsAnswerLoading(true); viewModel.getGptResponse(context); },
         onDismiss = { isPopupVisible = false }
     )
 
@@ -129,21 +140,34 @@ fun EditScreen(
         ) {
             EditTextField(
                 modifier = Modifier.fillMaxWidth(),
+                maxLines = 3,
                 value = uiState.value.currentCard.question,
                 onValueChange = { viewModel.changeQuestion(it) },
                 textStyle = MaterialTheme.typography.titleSmall,
                 hint = "Введите вопрос"
             )
 
-            EditTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                value = uiState.value.currentCard.answer,
-                onValueChange = { viewModel.changeAnswer(it) },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                hint = "Введите ответ"
-            )
+            if (!uiState.value.isAnswerLoading) {
+                EditTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    value = uiState.value.currentCard.answer,
+                    onValueChange = { viewModel.changeAnswer(it) },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    hint = "Введите ответ"
+                )
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp)
+                ) {
+                    SynchronizedShimmeringTexts()
+                }
+            }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -177,8 +201,61 @@ fun EditScreen(
 }
 
 @Composable
+fun SynchronizedShimmeringTexts() {
+    val transition = rememberInfiniteTransition(label = "skeletonShimmer")
+
+    val translateAnimation by transition.animateFloat(
+        label = "skeletonAnimation",
+        initialValue = -400f,
+        targetValue = 400f,
+        animationSpec = infiniteRepeatable(
+            tween(durationMillis = 1500, easing = LinearOutSlowInEasing),
+            RepeatMode.Restart
+        )
+    )
+
+    val shimmerColors = listOf(
+        Color(0xFF98ADFE),
+        Color(0xFFD7AEEB),
+        Color(0xFFF7E1EE)
+    )
+
+    val shimmerBrush = Brush.linearGradient(
+        colors = shimmerColors,
+        start = Offset(translateAnimation, 0f),
+        end = Offset(translateAnimation + 200f, 200f),
+        tileMode = TileMode.Mirror
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        repeat(4) {
+            Text(
+                text = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 3.dp)
+                    .background(shimmerBrush, RoundedCornerShape(12.dp)),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Text(
+            text = "                     ",
+            modifier = Modifier
+                .padding(vertical = 3.dp)
+                .background(shimmerBrush, RoundedCornerShape(12.dp)),
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
+}
+
+
+@Composable
 fun EditTextField(
     modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
     hint: String,
     value: String,
     textStyle: TextStyle,
@@ -205,6 +282,7 @@ fun EditTextField(
             textValue = it
             onValueChange(it.text)
         },
+        maxLines = maxLines,
         singleLine = false,
         modifier = modifier.padding(8.dp),
         textStyle = textStyle.copy(textAlign = TextAlign.Start, color = color),

@@ -101,8 +101,8 @@ fun GridScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .height(175.dp),
+                            .height(175.dp)
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -131,8 +131,8 @@ fun GridScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
                             .height(175.dp)
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
                             .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {

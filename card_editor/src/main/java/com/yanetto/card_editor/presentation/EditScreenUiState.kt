@@ -7,5 +7,6 @@ data class EditScreenUiState (
         Card(
             question = "",
             answer = ""
-        )
+        ),
+    val isAnswerLoading: Boolean = false
 )

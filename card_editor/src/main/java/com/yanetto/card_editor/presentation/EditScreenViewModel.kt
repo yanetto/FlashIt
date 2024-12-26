@@ -1,6 +1,8 @@
 package com.yanetto.card_editor.presentation
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yanetto.card_editor.domain.DeleteCardUseCase
@@ -38,6 +40,12 @@ class EditScreenViewModel @Inject constructor(
     fun changeAnswer(answer: String) {
         _uiState.update { currentState ->
             currentState.copy(currentCard = _uiState.value.currentCard.copy(answer = answer))
+        }
+    }
+
+    fun changeIsAnswerLoading(isAnswerLoading: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(isAnswerLoading = isAnswerLoading)
         }
     }
 
@@ -93,10 +101,11 @@ class EditScreenViewModel @Inject constructor(
         }
     }
 
-    fun getGptResponse() {
+    fun getGptResponse(context: Context) {
         viewModelScope.launch {
             try {
                 val response = gptRepository.getGptResponse(uiState.value.currentCard.question)
+                Log.d("RESPONSE", response)
                 _uiState.update { currentState ->
                     currentState.copy(
                         currentCard = currentState.currentCard.copy(answer = response)
@@ -104,12 +113,13 @@ class EditScreenViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("GPT_ERROR", e.stackTraceToString())
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        currentCard = currentState.currentCard.copy(answer = "ERROR")
-                    )
-                }
+                Toast.makeText(
+                    context,
+                    "Проверьте подключение к интернету и попробуйте снова",
+                    Toast.LENGTH_LONG
+                ).show()
             }
+            changeIsAnswerLoading(false)
         }
     }
 }

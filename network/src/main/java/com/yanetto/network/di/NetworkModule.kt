@@ -1,4 +1,4 @@
-package di
+package com.yanetto.network.di
 
 import com.yanetto.network.data.repository.GptRepository
 import dagger.Module

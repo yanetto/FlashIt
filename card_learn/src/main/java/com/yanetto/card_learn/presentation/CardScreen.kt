@@ -110,42 +110,66 @@ fun CardScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
 
-                Card(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-                        .clickable {
-                            offsetX = -1000f
-                            viewModel.addCard(uiState.value.currentCard)
-                        },
-                    colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                Column (
+                    modifier = Modifier.weight(1.5f)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.close),
-                        contentDescription = null,
+                    Card(
                         modifier = Modifier
-                            .size(50.dp)
-                            .padding(4.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color(0xFFf4b1ab), CircleShape)
+                            .clickable {
+                                offsetX = -1000f
+                                viewModel.addCard(uiState.value.currentCard)
+                            }
+                            .align(Alignment.CenterHorizontally),
+                        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.close),
+                            contentDescription = null,
+                            tint = Color(0xFFf4b1ab),
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(4.dp)
+                        )
+                    }
+                    Text(
+                        text = "Не знаю",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFFf4b1ab),
+                        modifier = Modifier.padding(4.dp).align(Alignment.CenterHorizontally)
                     )
                 }
 
                 Spacer(modifier = Modifier.weight(2.5f))
 
-                Card(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-                        .clickable {
-                            offsetX = 1000f
-                        },
-                    colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                Column (
+                    modifier = Modifier.weight(1.5f)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.check),
-                        contentDescription = null,
+                    Card(
                         modifier = Modifier
-                            .size(50.dp)
-                            .padding(4.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color(0xFFa8d5ba), CircleShape)
+                            .clickable {
+                                offsetX = 1000f
+                            }
+                            .align(Alignment.CenterHorizontally),
+                        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.check),
+                            tint = Color(0xFFa8d5ba),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(4.dp)
+                        )
+                    }
+                    Text(
+                        text = "Знаю",
+                        color = Color(0xFFa8d5ba),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(4.dp).align(Alignment.CenterHorizontally)
                     )
                 }
 
