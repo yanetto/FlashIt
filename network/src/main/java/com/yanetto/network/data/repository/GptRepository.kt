@@ -41,7 +41,9 @@ class GptRepository @Inject constructor(private val client: OkHttpClient) {
             )
         )
 
-        val requestBody = Json.encodeToString<Prompt>(prompt).toRequestBody("application/json".toMediaType())
+        val json = Json { ignoreUnknownKeys = true }
+
+        val requestBody = json.encodeToString<Prompt>(prompt).toRequestBody("application/json".toMediaType())
         Log.d("REQUEST_BODY", requestBody.toString())
 
         val request = Request.Builder()
@@ -60,7 +62,7 @@ class GptRepository @Inject constructor(private val client: OkHttpClient) {
                 throw Exception("Empty response body")
             }
 
-            val responseString = Json.decodeFromString<Response>(responseBody)
+            val responseString = json.decodeFromString<Response>(responseBody)
 
             return@use responseString.result.alternatives.firstOrNull()?.message?.text ?: ""
         }
