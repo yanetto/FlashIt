@@ -55,6 +55,8 @@ dependencies {
     implementation(project(":core"))
     implementation(libs.androidx.hilt.navigation.compose)
 
+    implementation(libs.jeziellago.compose.markdown)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)

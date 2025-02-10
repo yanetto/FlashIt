@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.card_learn.R
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun CardScreen(
@@ -296,17 +297,17 @@ fun ColumnScope.RotatingCard(
                 Text(
                     text = uiState.value.currentCard.question,
                     color = Color.Black,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(16.dp),
                     fontWeight = FontWeight.Bold
                 )
             } else {
-                Text(
-                    text = uiState.value.currentCard.answer,
-                    color = Color.Black,
+                MarkdownText(
+                    markdown = uiState.value.currentCard.answer,
+                    //color = Color.Black,
                     style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Start,
+                    //textAlign = TextAlign.Start,
                     modifier = Modifier
                         .padding(16.dp)
                         .verticalScroll(rememberScrollState())

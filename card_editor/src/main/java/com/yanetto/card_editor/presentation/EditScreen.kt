@@ -121,10 +121,19 @@ fun EditScreen(
                 .clip(MaterialTheme.shapes.medium),
             contentAlignment = Alignment.Center
         ) {
+            Icon(
+                modifier = Modifier
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.CenterStart)
+                    .clickable { onDoneClick(uiState.value.currentCard.setId) },
+                painter = painterResource(R.drawable.back),
+                contentDescription = null
+            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = if (uiState.value.currentCard.id == 0) "Новая карточка" else "Редактирование карточки",
+                text = if (uiState.value.currentCard.id == 0) "Новая карточка" else "Редактирование",
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
@@ -143,7 +152,7 @@ fun EditScreen(
                 maxLines = 3,
                 value = uiState.value.currentCard.question,
                 onValueChange = { viewModel.changeQuestion(it) },
-                textStyle = MaterialTheme.typography.titleSmall,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 hint = "Введите вопрос"
             )
 

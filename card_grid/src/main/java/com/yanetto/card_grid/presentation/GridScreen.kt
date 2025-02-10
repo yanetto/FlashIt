@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yanetto.card_grid.R
@@ -67,6 +69,15 @@ fun GridScreen(
                 .clip(MaterialTheme.shapes.medium),
             contentAlignment = Alignment.Center
         ) {
+            Icon(
+                modifier = Modifier
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.CenterStart)
+                    .clickable { onBackClick() },
+                painter = painterResource(R.drawable.back),
+                contentDescription = null
+            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -102,7 +113,7 @@ fun GridScreen(
                     Box(
                         modifier = Modifier
                             .height(175.dp)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(8.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -110,7 +121,9 @@ fun GridScreen(
                             text = uiState.value.cards[i].question,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
